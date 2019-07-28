@@ -6,11 +6,19 @@ import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.AppLayoutMenu;
+import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -29,10 +37,22 @@ public class AddCarGui extends VerticalLayout {
     public AddCarGui(CarRepo carRepo) {
         this.carRepo = carRepo;
 
-        Tab carList = new Tab("Car list");
-        Tab contact = new Tab("Contact");
-        Tab logout = new Tab("Log out");
-        Tabs tabs = new Tabs(carList, logout, contact);
+
+        AppLayout appLayout = new AppLayout();
+        AppLayoutMenu menu = appLayout.createMenu();
+        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Car Rental");
+        img.setHeight("44px");
+        appLayout.setBranding(img);
+
+        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(),"Add car", "addcar"),
+                new AppLayoutMenuItem(VaadinIcon.CAR.create(),"Car list", "list-car"),
+                new AppLayoutMenuItem("Page 3", "page3"),
+                new AppLayoutMenuItem("Page 4", "page4"));
+
+        Component content = new Span(new H3("Add new car"),
+                new Span("Page content"));
+        appLayout.setContent(content);
+
 
         TextField markTextField = new TextField("Mark:");
         TextField modelTextField = new TextField("Model:");
@@ -62,9 +82,9 @@ public class AddCarGui extends VerticalLayout {
         //
 */
         Button addButton = new Button("Add new car");
-        Label content = new Label(
+        Label not = new Label(
                 "You have added the car correctly.");
-        Notification notification = new Notification(content);
+        Notification notification = new Notification(not);
         notification.setDuration(2000);
         notification.setPosition(Notification.Position.MIDDLE);
         addButton.addClickListener(event -> {
@@ -86,7 +106,7 @@ public class AddCarGui extends VerticalLayout {
         });
 
 
-        add(tabs,markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
+        add(appLayout,markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
 
     }
 }
