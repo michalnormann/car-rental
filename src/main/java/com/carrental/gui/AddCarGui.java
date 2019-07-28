@@ -8,6 +8,7 @@ import com.carrental.repository.CarRepo;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -45,6 +46,11 @@ public class AddCarGui extends VerticalLayout {
         priceNumberField.setMax(5000);
         priceNumberField.setHasControls(true);
         Button addButton = new Button("Add new car");
+        Label content = new Label(
+                "You have added the car correctly.");
+        Notification notification = new Notification(content);
+        notification.setDuration(2000);
+        notification.setPosition(Notification.Position.MIDDLE);
         addButton.addClickListener(event -> {
             Car car = new Car();
             car.setMark(markTextField.getValue());
@@ -54,6 +60,13 @@ public class AddCarGui extends VerticalLayout {
             car.setCarType(carTypeComboBox.getValue());
             car.setPrice(priceNumberField.getValue());
             carRepo.save(car);
+            notification.open();
+            markTextField.setValue("");
+            modelTextField.setValue("");
+            fuelComboBox.setValue(null);
+            yearProductionNumberField.setValue(null);
+            carTypeComboBox.setValue(null);
+            priceNumberField.setValue(null);
         });
 
 
