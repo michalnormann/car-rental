@@ -5,6 +5,7 @@ import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
@@ -14,6 +15,8 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -45,6 +48,19 @@ public class AddCarGui extends VerticalLayout {
         priceNumberField.setMin(100);
         priceNumberField.setMax(5000);
         priceNumberField.setHasControls(true);
+/*
+        // Image
+        MemoryBuffer buffer = new MemoryBuffer();
+        Upload upload = new Upload(buffer);
+
+        upload.addSucceededListener(event -> {
+            Component component = createComponent(event.getMIMEType(),
+                    event.getFileName(), buffer.getInputStream());
+            showOutput(event.getFileName(), component, output);
+        });
+
+        //
+*/
         Button addButton = new Button("Add new car");
         Label content = new Label(
                 "You have added the car correctly.");

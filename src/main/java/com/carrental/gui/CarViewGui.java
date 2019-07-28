@@ -1,27 +1,34 @@
 package com.carrental.gui;
 
+import com.carrental.model.CarResponse;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
+import com.carrental.service.CarService;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@Route("car/{id}")
-public class CarViewGui extends VerticalLayout {
+@Route("car")
+    public class CarViewGui extends VerticalLayout {
 
     private CarRepo carRepo;
+    private CarResponse carResponse;
 
     @Autowired
     public CarViewGui() {
         this.carRepo = carRepo;
 
-/*
+
         TextField markTextField = new TextField("Mark:");
-        markTextField.setValue();
+        markTextField.setValue(carResponse.getMark());
+
+
+/*
         TextField modelTextField = new TextField("Model:");
         ComboBox<Fuel> fuelComboBox= new ComboBox<>("Fuel",Fuel.values());
         NumberField yearProductionNumberField = new NumberField("Year of Production");
