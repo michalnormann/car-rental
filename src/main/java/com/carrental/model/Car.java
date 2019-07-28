@@ -15,7 +15,7 @@ public class Car {
     private String mark;
     private String model;
     private Fuel fuel;
-    private int yearProduction;
+    private double yearProduction;
     private CarType carType;
     private double price;
 
@@ -51,11 +51,11 @@ public class Car {
         this.fuel = fuel;
     }
 
-    public int getYearProduction() {
+    public double getYearProduction() {
         return yearProduction;
     }
 
-    public void setYearProduction(int yearProduction) {
+    public void setYearProduction(double yearProduction) {
         this.yearProduction = yearProduction;
     }
 

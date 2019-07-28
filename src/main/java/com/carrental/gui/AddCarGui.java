@@ -1,17 +1,27 @@
 package com.carrental.gui;
 
 
+import com.carrental.model.Car;
+import com.carrental.model.CarType;
+import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Route("main")
+@Route("addcar")
 public class AddCarGui extends VerticalLayout {
 
     private CarRepo carRepo;
 
+    @Autowired
     public AddCarGui(CarRepo carRepo) {
         this.carRepo = carRepo;
 
@@ -20,9 +30,34 @@ public class AddCarGui extends VerticalLayout {
         Tab logout = new Tab("Log out");
         Tabs tabs = new Tabs(carList, logout, contact);
 
-        
+        TextField markTextField = new TextField("Mark:");
+        TextField modelTextField = new TextField("Model:");
+        ComboBox<Fuel> fuelComboBox= new ComboBox<>("Fuel",Fuel.values());
+        NumberField yearProductionNumberField = new NumberField("Year of Production");
+        yearProductionNumberField.setMin(1980);
+        yearProductionNumberField.setMax(2019);
+        yearProductionNumberField.setErrorMessage("Set year of production from 1980 to 2019.");
+        yearProductionNumberField.setHasControls(true);
+        ComboBox<CarType> carTypeComboBox= new ComboBox<>("Car Type", CarType.values());
+        NumberField priceNumberField = new NumberField("Price per day");
+        priceNumberField.setValue(100d);
+        priceNumberField.setMin(100);
+        priceNumberField.setMax(5000);
+        priceNumberField.setHasControls(true);
+        Button addButton = new Button("Add new car");
+        addButton.addClickListener(event -> {
+            Car car = new Car();
+            car.setMark(markTextField.getValue());
+            car.setModel(modelTextField.getValue());
+            car.setFuel(fuelComboBox.getValue());
+            car.setYearProduction(yearProductionNumberField.getValue());
+            car.setCarType(carTypeComboBox.getValue());
+            car.setPrice(priceNumberField.getValue());
+            carRepo.save(car);
+        });
 
-        add(tabs);
+
+        add(tabs,markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
 
     }
 }
