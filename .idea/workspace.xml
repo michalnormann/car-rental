@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="febf72be-07f8-4547-b023-6a3076b81832" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/ContactGui.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/FotosGui.java" afterDir="false" />
+    <list default="true" id="febf72be-07f8-4547-b023-6a3076b81832" name="Default Changelist" comment="Male Poprawki w ListCarGui">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carrental/gui/CarViewGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/CarViewGui.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carrental/gui/ContactGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/ContactGui.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carrental/gui/FotosGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/FotosGui.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carrental/gui/ListCarGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carrental/gui/ListCarGui.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/carrental/gui/CarViewGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/carrental/gui/CarViewGui.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/carrental/gui/ListCarGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/carrental/gui/ListCarGui.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -98,7 +100,7 @@
       <workItem from="1564302516750" duration="73000" />
       <workItem from="1564303592094" duration="12283000" />
       <workItem from="1564337305536" duration="1900000" />
-      <workItem from="1564514719000" duration="4551000" />
+      <workItem from="1564514719000" duration="6259000" />
     </task>
     <task id="LOCAL-00001" summary="Test Commit">
       <created>1564514813717</created>
@@ -107,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564514813718</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ContactGui,FotosGui (jeszcze nei działa ) , nie skończyłem Menu">
+      <created>1564519536862</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1564519536862</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,6 +135,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Test Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test Commit" />
+    <MESSAGE value="ContactGui,FotosGui (jeszcze nei działa ) , nie skończyłem Menu" />
+    <MESSAGE value="Male Poprawki w ListCarGui" />
+    <option name="LAST_COMMIT_MESSAGE" value="Male Poprawki w ListCarGui" />
   </component>
 </project>

@@ -18,7 +18,6 @@ public class FotosGui extends VerticalLayout {
         this.carRepo = carRepo;
 
         Tab tabview = new Tab();
-
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
         Image img = new Image("https://image.flaticon.com/icons/png/512/38/38967.png", "Aparat Logo");

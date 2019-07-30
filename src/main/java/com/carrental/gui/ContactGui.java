@@ -20,10 +20,7 @@ public class ContactGui extends VerticalLayout {
         this.carRepo = carRepo;
 
         Tab tabview = new Tab();
-
         AppLayout appLayout = new AppLayout();
-
-
         AppLayoutMenu menu = appLayout.createMenu();
         Image img = new Image("https://cdn4.iconfinder.com/data/icons/rcons-phone/16/handset_round-2-512.png", "Phone Logo");
         img.setHeight("100px");
@@ -45,9 +42,7 @@ public class ContactGui extends VerticalLayout {
                 ));
         Component allComponents = new Span(contentAdress,contentNameCompany,contentPhoneNumber);
         appLayout.setContent(allComponents);
-
-        add(appLayout);
-        add(tabview);
+        add(appLayout,tabview);
 
 
     }
