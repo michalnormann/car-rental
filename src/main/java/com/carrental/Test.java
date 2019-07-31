@@ -24,5 +24,14 @@ public class Test {
         car.setYearProduction(2019);
         car.setPrice(500);
         carRepo.save(car);
+
+        Car car1 = new Car();
+        car1.setModel("Passat");
+        car1.setMark("Volksvagen");
+        car1.setFuel(Fuel.DIESEL);
+        car1.setCarType(CarType.COMBI);
+        car1.setYearProduction(2018);
+        car1.setPrice(1000);
+        carRepo.save(car1);
     }
 }

@@ -40,18 +40,14 @@ public class AddCarGui extends VerticalLayout {
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
-        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Car Rental");
-        img.setHeight("44px");
+        Image img = new Image("https://cdn4.iconfinder.com/data/icons/urban-transport-3/50/48-512.png", "Car Logo");
+        img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(),"Add car", "addcar"),
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(),"Car list", "list-car"),
-                new AppLayoutMenuItem("Page 3", "page3"),
-                new AppLayoutMenuItem("Page 4", "page4"));
-
-        Component content = new Span(new H3("Add new car"),
-                new Span("Page content"));
-        appLayout.setContent(content);
+        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
+                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
+                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
 
 
         TextField markTextField = new TextField("Mark:");
@@ -105,8 +101,8 @@ public class AddCarGui extends VerticalLayout {
             priceNumberField.setValue(null);
         });
 
-
-        add(appLayout,markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
+        add(appLayout);
+        add(markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
 
     }
 }
