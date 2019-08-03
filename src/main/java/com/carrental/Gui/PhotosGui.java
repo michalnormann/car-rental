@@ -1,4 +1,4 @@
-package com.carrental.gui;
+package com.carrental.Gui;
 
 import com.carrental.repository.CarRepo;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -9,6 +9,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.Route;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collection;
 
 @Route("photos")
 public class PhotosGui extends VerticalLayout {
@@ -24,10 +28,18 @@ public class PhotosGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
+        menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
                 new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
+
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
+        }
 
         add(appLayout);
         add(tabview);

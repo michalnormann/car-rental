@@ -1,25 +1,20 @@
-package com.carrental.gui;
+package com.carrental.Gui;
 
 import com.carrental.model.CarResponse;
-import com.carrental.model.CarType;
-import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
-import com.carrental.service.CarService;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collection;
 
 @Route("car")
 public class CarViewGui extends VerticalLayout {
@@ -37,10 +32,18 @@ public class CarViewGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
+        menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
                 new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
+        }
 
 
 

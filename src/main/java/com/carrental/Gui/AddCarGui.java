@@ -1,11 +1,10 @@
-package com.carrental.gui;
+package com.carrental.Gui;
 
 
 import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
@@ -16,12 +15,15 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collection;
 
 @Route("addcar")
 public class AddCarGui extends VerticalLayout{
@@ -39,10 +41,18 @@ public class AddCarGui extends VerticalLayout{
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
+        menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
                 new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
+        }
 
 
         TextField markTextField = new TextField("Mark:");
