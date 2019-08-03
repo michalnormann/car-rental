@@ -7,7 +7,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 
-@Route("main")
+@Route("")
 public class CarGui extends VerticalLayout {
 
     private CarRepo carRepo;
