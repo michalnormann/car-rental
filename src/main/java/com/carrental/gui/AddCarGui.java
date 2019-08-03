@@ -11,25 +11,20 @@ import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("addcar")
-public class AddCarGui extends VerticalLayout {
+public class AddCarGui extends VerticalLayout{
 
     private CarRepo carRepo;
 
@@ -47,7 +42,7 @@ public class AddCarGui extends VerticalLayout {
         menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
 
 
         TextField markTextField = new TextField("Mark:");
@@ -60,6 +55,7 @@ public class AddCarGui extends VerticalLayout {
         yearProductionNumberField.setHasControls(true);
         ComboBox<CarType> carTypeComboBox= new ComboBox<>("Car Type", CarType.values());
         NumberField priceNumberField = new NumberField("Price per day");
+        priceNumberField.setSuffixComponent(new Span("zł"));
         priceNumberField.setValue(100d);
         priceNumberField.setMin(100);
         priceNumberField.setMax(5000);
@@ -68,13 +64,11 @@ public class AddCarGui extends VerticalLayout {
         // Image
         MemoryBuffer buffer = new MemoryBuffer();
         Upload upload = new Upload(buffer);
-
         upload.addSucceededListener(event -> {
             Component component = createComponent(event.getMIMEType(),
                     event.getFileName(), buffer.getInputStream());
             showOutput(event.getFileName(), component, output);
         });
-
         //
 */
         Button addButton = new Button("Add new car");
@@ -93,16 +87,19 @@ public class AddCarGui extends VerticalLayout {
             car.setPrice(priceNumberField.getValue());
             carRepo.save(car);
             notification.open();
-            markTextField.setValue("");
-            modelTextField.setValue("");
-            fuelComboBox.setValue(null);
-            yearProductionNumberField.setValue(null);
-            carTypeComboBox.setValue(null);
-            priceNumberField.setValue(null);
+            markTextField.clear();
+            modelTextField.clear();
+            fuelComboBox.clear();
+            yearProductionNumberField.clear();
+            carTypeComboBox.clear();
+            priceNumberField.clear();
         });
 
-        add(appLayout);
-        add(markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
+        VerticalLayout verticalLayout = new VerticalLayout(markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
+        verticalLayout.setSizeFull();
+        verticalLayout.setAlignItems(Alignment.CENTER);
 
+        appLayout.setContent(verticalLayout);
+        add(appLayout);
     }
 }

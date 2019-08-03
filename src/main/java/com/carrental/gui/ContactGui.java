@@ -29,7 +29,7 @@ public class ContactGui extends VerticalLayout {
         menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
 
         Component contentNameCompany = new Span(new H3("Rental Car"),
                 new Span("Rental-Car Company Information"
@@ -40,8 +40,10 @@ public class ContactGui extends VerticalLayout {
         Component contentAdress = new Span(new H3("Adress"),
                 new Span("Al. Jerozolimskie 160   Warszawa , 02-326"
                 ));
-        Component allComponents = new Span(contentAdress,contentNameCompany,contentPhoneNumber);
-        appLayout.setContent(allComponents);
+        VerticalLayout verticalLayout = new VerticalLayout(contentAdress,contentNameCompany,contentPhoneNumber);
+        verticalLayout.setSizeFull();
+        verticalLayout.setAlignItems(Alignment.CENTER);
+        appLayout.setContent(verticalLayout);
         add(appLayout,tabview);
 
 

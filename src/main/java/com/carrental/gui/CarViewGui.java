@@ -22,14 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Route("car")
-    public class CarViewGui extends VerticalLayout {
+public class CarViewGui extends VerticalLayout {
 
     private CarRepo carRepo;
     private CarResponse carResponse;
 
-//    @Autowired
+    @Autowired
     public CarViewGui() {
-//        this.carRepo = carRepo;
+        this.carRepo = carRepo;
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.GetMapping;
         menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
 
 
 
@@ -63,8 +63,6 @@ import org.springframework.web.bind.annotation.GetMapping;
         priceNumberField.setMin(100);
         priceNumberField.setMax(5000);
         priceNumberField.setHasControls(true);
-
-
 */
 
 
