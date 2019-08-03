@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.GetMapping;
     private CarRepo carRepo;
     private CarResponse carResponse;
 
-//    @Autowired
+    @Autowired
     public CarViewGui() {
-//        this.carRepo = carRepo;
+        this.carRepo = carRepo;
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
