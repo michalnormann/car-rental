@@ -40,8 +40,10 @@ public class ContactGui extends VerticalLayout {
         Component contentAdress = new Span(new H3("Adress"),
                 new Span("Al. Jerozolimskie 160   Warszawa , 02-326"
                 ));
-        Component allComponents = new Span(contentAdress,contentNameCompany,contentPhoneNumber);
-        appLayout.setContent(allComponents);
+        VerticalLayout verticalLayout = new VerticalLayout(contentAdress,contentNameCompany,contentPhoneNumber);
+        verticalLayout.setSizeFull();
+        verticalLayout.setAlignItems(Alignment.CENTER);
+        appLayout.setContent(verticalLayout);
         add(appLayout,tabview);
 
 

@@ -20,6 +20,8 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +35,7 @@ public class ListCarGui extends VerticalLayout {
     
     public ListCarGui(CarRepo carRepo) {
         this.carRepo = carRepo;
-        Tab tabview = new Tab();
+
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
         Image img = new Image("https://cdn0.iconfinder.com/data/icons/automotive/128/CARS-512.png", "Cars Logo");
@@ -50,8 +52,39 @@ public class ListCarGui extends VerticalLayout {
         Grid<Car> carGrid = new Grid<>(Car.class);
         List<Car> cars = carRepo.findAll();
         carGrid.setItems(cars);
-        carGrid.addComponentColumn(item -> detailsButton(carGrid, item))
-                .setHeader("Actions");
+        carGrid.setHeightFull();
+
+//
+        carGrid.setSelectionMode(Grid.SelectionMode.NONE);
+
+// You can use any renderer for the item details. By default, the
+// details are opened and closed by clicking the rows.
+        carGrid.setItemDetailsRenderer(TemplateRenderer.<Car> of(
+                "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                        + "<div><b>Mark: </b>[[item.mark]]</div>"
+                        + "<div><b>Model: </b>[[item.model]]</div>"
+                        + "<div><b>Fuel: </b>[[item.fuel]]</div>"
+                        + "<div><b>Year of Production: </b>[[item.yearProduction]]</div>"
+                        + "<div><b>CarType: </b>[[item.carType]]</div>"
+                        + "<div><b>Price: </b>[[item.price]] zł</div>"
+                        + "</div>")
+                .withProperty("mark", Car::getMark)
+                .withProperty("model", Car::getModel)
+                .withProperty("fuel", Car::getFuel)
+                .withProperty("yearProduction", Car::getYearProduction)
+                .withProperty("carType", Car::getCarType)
+                .withProperty("price", Car::getPrice)
+                // This is now how we open the details
+                .withEventHandler("handleClick", car -> {
+                    carGrid.getDataProvider().refreshItem(car);
+                }));
+
+// Disable the default way of opening item details:
+        carGrid.setDetailsVisibleOnClick(false);
+
+        carGrid.addColumn(new NativeButtonRenderer<>("Details", item -> carGrid
+                .setDetailsVisible(item, !carGrid.isDetailsVisible(item)))).setHeader("Actions");
+//
         ListDataProvider<Car> dataProvider = new ListDataProvider<>(cars);
         carGrid.setDataProvider(dataProvider);
         carGrid.removeColumnByKey("fuel");
@@ -95,15 +128,5 @@ public class ListCarGui extends VerticalLayout {
         add(appLayout);
 
 
-    }
-
-    private Button detailsButton(Grid<Car> carGrid, Car car) {
-        Button detailsButton = new Button("Details", clickEvent -> {
-            ListDataProvider<Car> dataProvider = (ListDataProvider) carGrid
-                    .getDataProvider();
-            dataProvider.getItems().contains(car);
-            dataProvider.refreshAll();
-        });
-        return detailsButton;
     }
 }
