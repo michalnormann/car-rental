@@ -10,11 +10,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.Route;
 
-@Route("fotos")
-public class FotosGui extends VerticalLayout {
+@Route("photos")
+public class PhotosGui extends VerticalLayout {
 
     private CarRepo carRepo;
-    public FotosGui(CarRepo carRepo) {
+    public PhotosGui(CarRepo carRepo) {
         this.carRepo = carRepo;
 
         Tab tabview = new Tab();
@@ -27,7 +27,7 @@ public class FotosGui extends VerticalLayout {
         menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
 
         add(appLayout);
         add(tabview);

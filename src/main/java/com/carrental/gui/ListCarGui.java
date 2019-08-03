@@ -44,7 +44,7 @@ public class ListCarGui extends VerticalLayout {
         menu.addMenuItems(new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"),
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
 
 
         Grid<Car> carGrid = new Grid<>(Car.class);
