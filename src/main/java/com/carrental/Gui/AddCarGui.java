@@ -42,7 +42,7 @@ public class AddCarGui extends VerticalLayout{
         appLayout.setBranding(img);
 
         menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "list-car"),
+                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
                 new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
 
