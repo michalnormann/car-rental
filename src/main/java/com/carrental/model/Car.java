@@ -18,6 +18,16 @@ public class Car {
     private double yearProduction;
     private CarType carType;
     private double price;
+    private boolean rent = false;
+    private String username;
+
+    public boolean isRent() {
+        return rent;
+    }
+
+    public void setRent(boolean rent) {
+        this.rent = rent;
+    }
 
     public Long getId() {
         return id;

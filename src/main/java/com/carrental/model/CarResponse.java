@@ -17,4 +17,5 @@ public class CarResponse {
     private double yearProduction;
     private CarType carType;
     private double price;
+    private boolean rent = false;
 }

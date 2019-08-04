@@ -1,23 +1,29 @@
 package com.carrental.Gui;
 
 import com.carrental.model.Car;
+import com.carrental.model.CarResponse;
 import com.carrental.repository.CarRepo;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -73,6 +79,7 @@ public class ListCarGui extends VerticalLayout {
                         + "<div><b>Year of Production: </b>[[item.yearProduction]]</div>"
                         + "<div><b>CarType: </b>[[item.carType]]</div>"
                         + "<div><b>Price: </b>[[item.price]] zł</div>"
+                        + "<div><b>Rent: </b>[[item.rent]]</div>"
                         + "</div>")
                 .withProperty("mark", Car::getMark)
                 .withProperty("model", Car::getModel)
@@ -80,6 +87,7 @@ public class ListCarGui extends VerticalLayout {
                 .withProperty("yearProduction", Car::getYearProduction)
                 .withProperty("carType", Car::getCarType)
                 .withProperty("price", Car::getPrice)
+                .withProperty("rent", Car::isRent)
                 // This is now how we open the details
                 .withEventHandler("handleClick", car -> {
                     carGrid.getDataProvider().refreshItem(car);
@@ -89,14 +97,41 @@ public class ListCarGui extends VerticalLayout {
         carGrid.setDetailsVisibleOnClick(false);
 
         carGrid.addColumn(new NativeButtonRenderer<>("Details", item -> carGrid
-                .setDetailsVisible(item, !carGrid.isDetailsVisible(item)))).setHeader("Actions");
+                .setDetailsVisible(item, !carGrid.isDetailsVisible(item)))).setHeader("More details");
 //
         ListDataProvider<Car> dataProvider = new ListDataProvider<>(cars);
         carGrid.setDataProvider(dataProvider);
+
+        carGrid.addColumn(new ComponentRenderer<>(car -> {
+
+            // button for saving the name to backend
+            Button rent = new Button("Rent", event -> {
+                if(!car.isRent()) {
+                    car.setRent(true);
+                    carRepo.save(car);
+                    UI.getCurrent().getPage().reload();
+                } else {
+                    car.setRent(false);
+                    carRepo.save(car);
+                    UI.getCurrent().getPage().reload();
+                }
+            });
+            if(!car.isRent()) {
+                rent.setText("Rent");
+            } else {
+                rent.setText("Return");
+            }
+
+            // layouts for placing the text field on top of the buttons
+            HorizontalLayout buttons = new HorizontalLayout(rent);
+            return new VerticalLayout(buttons);
+        })).setHeader("Actions");
+
         carGrid.removeColumnByKey("fuel");
         carGrid.removeColumnByKey("yearProduction");
         carGrid.removeColumnByKey("price");
         carGrid.removeColumnByKey("id");
+        carGrid.removeColumnByKey("rent");
 
         // Filter Car Type
         TextField carTypeTextField = new TextField();
@@ -132,7 +167,6 @@ public class ListCarGui extends VerticalLayout {
         Component allComponents = new Span(filterPanel,carGrid);
         appLayout.setContent(allComponents);
         add(appLayout);
-
 
     }
 }
