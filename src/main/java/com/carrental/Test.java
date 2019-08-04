@@ -25,7 +25,6 @@ public class Test {
         car.setCarType(CarType.SEDAN);
         car.setYearProduction(2019);
         car.setPrice(500);
-        car.setRent(true);
         carRepo.save(car);
 
         Car car1 = new Car();

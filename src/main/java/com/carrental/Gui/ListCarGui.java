@@ -1,8 +1,9 @@
 package com.carrental.Gui;
 
 import com.carrental.model.Car;
-import com.carrental.model.CarResponse;
+import com.carrental.model.User;
 import com.carrental.repository.CarRepo;
+import com.carrental.repository.UserRepo;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -23,9 +24,9 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -36,9 +37,11 @@ import java.util.List;
 public class ListCarGui extends VerticalLayout {
 
     private CarRepo carRepo;
+    private UserRepo userRepo;
 
-    public ListCarGui(CarRepo carRepo) {
+    public ListCarGui(CarRepo carRepo, UserRepo userRepo) {
         this.carRepo = carRepo;
+        this.userRepo = userRepo;
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
@@ -66,11 +69,7 @@ public class ListCarGui extends VerticalLayout {
         carGrid.setItems(cars);
         carGrid.setHeightFull();
 
-//
         carGrid.setSelectionMode(Grid.SelectionMode.NONE);
-
-// You can use any renderer for the item details. By default, the
-// details are opened and closed by clicking the rows.
         carGrid.setItemDetailsRenderer(TemplateRenderer.<Car> of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
                         + "<div><b>Mark: </b>[[item.mark]]</div>"
@@ -80,6 +79,7 @@ public class ListCarGui extends VerticalLayout {
                         + "<div><b>CarType: </b>[[item.carType]]</div>"
                         + "<div><b>Price: </b>[[item.price]] zł</div>"
                         + "<div><b>Rent: </b>[[item.rent]]</div>"
+                        + "<div><b>Username: </b>[[item.username]]</div>"
                         + "</div>")
                 .withProperty("mark", Car::getMark)
                 .withProperty("model", Car::getModel)
@@ -88,42 +88,49 @@ public class ListCarGui extends VerticalLayout {
                 .withProperty("carType", Car::getCarType)
                 .withProperty("price", Car::getPrice)
                 .withProperty("rent", Car::isRent)
+                .withProperty("username", Car::getUsername)
                 // This is now how we open the details
                 .withEventHandler("handleClick", car -> {
                     carGrid.getDataProvider().refreshItem(car);
                 }));
 
-// Disable the default way of opening item details:
         carGrid.setDetailsVisibleOnClick(false);
 
         carGrid.addColumn(new NativeButtonRenderer<>("Details", item -> carGrid
                 .setDetailsVisible(item, !carGrid.isDetailsVisible(item)))).setHeader("More details");
-//
+
         ListDataProvider<Car> dataProvider = new ListDataProvider<>(cars);
         carGrid.setDataProvider(dataProvider);
 
+        String loggedUser = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getLogin();
+
         carGrid.addColumn(new ComponentRenderer<>(car -> {
 
-            // button for saving the name to backend
-            Button rent = new Button("Rent", event -> {
+            Button rentButton = new Button("Rent", event -> {
                 if(!car.isRent()) {
                     car.setRent(true);
+                    car.setUsername(loggedUser);
+                    carRepo.save(car);
+                    UI.getCurrent().getPage().reload();
+                } else if (car.isRent() && car.getUsername().equals(loggedUser)){
+                    car.setRent(false);
+                    car.setUsername(null);
                     carRepo.save(car);
                     UI.getCurrent().getPage().reload();
                 } else {
-                    car.setRent(false);
-                    carRepo.save(car);
-                    UI.getCurrent().getPage().reload();
+
                 }
             });
             if(!car.isRent()) {
-                rent.setText("Rent");
+                rentButton.setText("Rent");
+            } else if (car.isRent() && car.getUsername().equals(loggedUser)){
+                rentButton.setText("Return");
             } else {
-                rent.setText("Return");
+                rentButton.setText("Rented");
+                rentButton.setEnabled(false);
             }
 
-            // layouts for placing the text field on top of the buttons
-            HorizontalLayout buttons = new HorizontalLayout(rent);
+            HorizontalLayout buttons = new HorizontalLayout(rentButton);
             return new VerticalLayout(buttons);
         })).setHeader("Actions");
 

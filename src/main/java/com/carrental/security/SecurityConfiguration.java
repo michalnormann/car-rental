@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-//@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -43,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/addcar", "/contact", "/photos" ,"/list-car").hasRole("ADMIN")
                 .antMatchers("/contact", "/photos", "/list-car").hasRole("USER")
                 .anyRequest().authenticated()
-                .and().formLogin().defaultSuccessUrl("/list-car")
+                .and().formLogin().defaultSuccessUrl("/")
                 .and().logout().logoutSuccessUrl("/contact");
         http.csrf().disable();
     }

@@ -15,6 +15,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -57,12 +58,14 @@ public class AddCarGui extends VerticalLayout{
 
         TextField markTextField = new TextField("Mark:");
         TextField modelTextField = new TextField("Model:");
+        HorizontalLayout hz1 = new HorizontalLayout(markTextField, modelTextField);
         ComboBox<Fuel> fuelComboBox= new ComboBox<>("Fuel",Fuel.values());
         NumberField yearProductionNumberField = new NumberField("Year of Production");
         yearProductionNumberField.setMin(1980);
         yearProductionNumberField.setMax(2019);
         yearProductionNumberField.setErrorMessage("Set year of production from 1980 to 2019.");
         yearProductionNumberField.setHasControls(true);
+        HorizontalLayout hz2 = new HorizontalLayout(fuelComboBox, yearProductionNumberField);
         ComboBox<CarType> carTypeComboBox= new ComboBox<>("Car Type", CarType.values());
         NumberField priceNumberField = new NumberField("Price per day");
         priceNumberField.setSuffixComponent(new Span("zł"));
@@ -70,17 +73,8 @@ public class AddCarGui extends VerticalLayout{
         priceNumberField.setMin(100);
         priceNumberField.setMax(5000);
         priceNumberField.setHasControls(true);
-/*
-        // Image
-        MemoryBuffer buffer = new MemoryBuffer();
-        Upload upload = new Upload(buffer);
-        upload.addSucceededListener(event -> {
-            Component component = createComponent(event.getMIMEType(),
-                    event.getFileName(), buffer.getInputStream());
-            showOutput(event.getFileName(), component, output);
-        });
-        //
-*/
+        HorizontalLayout hz3 = new HorizontalLayout(carTypeComboBox, priceNumberField);
+
         Button addButton = new Button("Add new car");
         Label not = new Label(
                 "You have added the car correctly.");
@@ -105,7 +99,7 @@ public class AddCarGui extends VerticalLayout{
             priceNumberField.clear();
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout(markTextField,modelTextField,fuelComboBox,yearProductionNumberField,carTypeComboBox,priceNumberField,addButton);
+        VerticalLayout verticalLayout = new VerticalLayout(hz1,hz2,hz3,addButton);
         verticalLayout.setSizeFull();
         verticalLayout.setAlignItems(Alignment.CENTER);
 
