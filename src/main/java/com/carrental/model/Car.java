@@ -19,6 +19,7 @@ public class Car {
     private CarType carType;
     private double price;
     private boolean rent = false;
+    private String imageURL;
 
     public String getUsername() {
         return username;
@@ -29,14 +30,6 @@ public class Car {
     }
 
     private String username;
-
-    public boolean isRent() {
-        return rent;
-    }
-
-    public void setRent(boolean rent) {
-        this.rent = rent;
-    }
 
     public Long getId() {
         return id;
@@ -92,5 +85,21 @@ public class Car {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isRent() {
+        return rent;
+    }
+
+    public void setRent(boolean rent) {
+        this.rent = rent;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

@@ -18,4 +18,5 @@ public class CarResponse {
     private CarType carType;
     private double price;
     private boolean rent = false;
+    private String imageURL;
 }

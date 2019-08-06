@@ -84,7 +84,8 @@ public class ListCarGui extends VerticalLayout {
                         + "<div><b>CarType: </b>[[item.carType]]</div>"
                         + "<div><b>Price: </b>[[item.price]] zł</div>"
                         + "<div><b>Rent: </b>[[item.rent]]</div>"
-                        + "<div><b>Username: </b>[[item.username]]</div>"
+//                        + "<div><b>Username: </b>[[item.username]]</div>"
+                        + "<div><img src=\"[[item.imageURL]]\" style=\"max-height:200px;max-width:200px\"></div>"
                         + "</div>")
                 .withProperty("mark", Car::getMark)
                 .withProperty("model", Car::getModel)
@@ -94,6 +95,7 @@ public class ListCarGui extends VerticalLayout {
                 .withProperty("price", Car::getPrice)
                 .withProperty("rent", Car::isRent)
                 .withProperty("username", Car::getUsername)
+                .withProperty("imageURL", Car::getImageURL)
                 // This is now how we open the details
                 .withEventHandler("handleClick", car -> {
                     carGrid.getDataProvider().refreshItem(car);
@@ -144,6 +146,7 @@ public class ListCarGui extends VerticalLayout {
         carGrid.removeColumnByKey("price");
         carGrid.removeColumnByKey("id");
         carGrid.removeColumnByKey("rent");
+        carGrid.removeColumnByKey("imageURL");
 
         // Filter Car Type
         TextField carTypeTextField = new TextField();

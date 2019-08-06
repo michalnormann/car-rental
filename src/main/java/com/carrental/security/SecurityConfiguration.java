@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/contact","/register").permitAll()
-                .antMatchers("/addcar", "/contact", "/photos" ,"/list-car").hasRole("ADMIN")
+                .antMatchers("/addcar", "/contact", "/photos" ,"/list-car","/uploadimage").hasRole("ADMIN")
                 .antMatchers("/contact", "/photos", "/list-car").hasRole("USER")
                 .anyRequest().authenticated()
                 .and().formLogin().defaultSuccessUrl("/")

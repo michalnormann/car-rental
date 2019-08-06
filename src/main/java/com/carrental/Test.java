@@ -24,6 +24,7 @@ public class Test {
         car.setFuel(Fuel.GASOLINE);
         car.setCarType(CarType.SEDAN);
         car.setYearProduction(2019);
+        car.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565123780/lwy3blg6tyeuflaumkvi.jpg");
         car.setPrice(500);
         carRepo.save(car);
 

@@ -1,6 +1,7 @@
 package com.carrental.Gui;
 
 
+import com.carrental.image.ImageUpader;
 import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
@@ -35,10 +36,12 @@ import java.util.Collection;
 public class AddCarGui extends VerticalLayout{
 
     private CarRepo carRepo;
+    private ImageUpader imageUpader;
 
     @Autowired
-    public AddCarGui(CarRepo carRepo) {
+    public AddCarGui(CarRepo carRepo, ImageUpader imageUpader) {
         this.carRepo = carRepo;
+        this.imageUpader = imageUpader;
 
 
         AppLayout appLayout = new AppLayout();
@@ -81,6 +84,21 @@ public class AddCarGui extends VerticalLayout{
         priceNumberField.setHasControls(true);
         HorizontalLayout hz3 = new HorizontalLayout(carTypeComboBox, priceNumberField);
 
+
+        // Image Upader
+        TextField localTextField = new TextField("Loc.: (ex. E:\\folder\\image.jpg");
+        Button button = new Button("Upload");
+        Image image = new Image();
+        button.addClickListener(event -> {
+            String uploadedImage = imageUpader.uploadFile(localTextField.getValue());
+            image.setSrc(uploadedImage);
+            image.setMaxHeight("200px");
+            image.setMaxWidth("200px");
+        });
+
+        VerticalLayout imageVerticalLayout = new VerticalLayout(localTextField,button,image);
+
+
         Button addButton = new Button("Add new car");
         Label not = new Label(
                 "You have added the car correctly.");
@@ -95,6 +113,7 @@ public class AddCarGui extends VerticalLayout{
             car.setYearProduction(yearProductionNumberField.getValue());
             car.setCarType(carTypeComboBox.getValue());
             car.setPrice(priceNumberField.getValue());
+            car.setImageURL(imageUpader.uploadFile(localTextField.getValue()));
             carRepo.save(car);
             notification.open();
             markTextField.clear();
@@ -105,7 +124,7 @@ public class AddCarGui extends VerticalLayout{
             priceNumberField.clear();
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout(hz1,hz2,hz3,addButton);
+        VerticalLayout verticalLayout = new VerticalLayout(hz1,hz2,hz3,imageVerticalLayout,addButton);
         verticalLayout.setSizeFull();
         verticalLayout.setAlignItems(Alignment.CENTER);
 
