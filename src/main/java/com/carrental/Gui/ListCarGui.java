@@ -25,10 +25,13 @@ import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,7 +56,9 @@ public class ListCarGui extends VerticalLayout {
         menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"),
+                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+
 
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 

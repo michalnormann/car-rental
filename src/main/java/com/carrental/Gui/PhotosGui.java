@@ -31,7 +31,9 @@ public class PhotosGui extends VerticalLayout {
         menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", "photos"),
+                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+
 
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 

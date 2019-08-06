@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class PDFCreator {
 
-    public static final String DEST = "C:/Users/Michał 2/Downloads/car-rental-invoice.pdf";
+    public static final String DEST = "C:/Users/Michal/Downloads/car-rental-invoice.pdf";
     public static final String IMAGE = "https://cdn0.iconfinder.com/data/icons/automotive/128/CARS-512.png";
 
 

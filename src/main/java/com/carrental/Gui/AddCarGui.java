@@ -5,11 +5,15 @@ import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
 import com.carrental.repository.CarRepo;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
@@ -19,6 +23,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,7 +50,9 @@ public class AddCarGui extends VerticalLayout{
         menu.addMenuItems(
                 new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"),
+                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+
 
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
@@ -55,9 +62,8 @@ public class AddCarGui extends VerticalLayout{
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
 
-
-        TextField markTextField = new TextField("Mark:");
-        TextField modelTextField = new TextField("Model:");
+        TextField markTextField = new TextField("Mark");
+        TextField modelTextField = new TextField("Model");
         HorizontalLayout hz1 = new HorizontalLayout(markTextField, modelTextField);
         ComboBox<Fuel> fuelComboBox= new ComboBox<>("Fuel",Fuel.values());
         NumberField yearProductionNumberField = new NumberField("Year of Production");

@@ -15,16 +15,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
+    private String name;
+    private String surname;
     private String password;
     private String role;
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     @OneToMany
     @JoinColumn(name = "user_id")
@@ -45,6 +40,22 @@ public class User implements UserDetails {
         this.login = login;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -55,6 +66,14 @@ public class User implements UserDetails {
 
     public void setCar(Set<Car> car) {
         this.car = car;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
