@@ -3,7 +3,6 @@ package com.carrental.Gui;
 import com.carrental.model.User;
 import com.carrental.repository.UserRepo;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
@@ -13,12 +12,11 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamRegistration;
-import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,8 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 @Route("register")
@@ -102,7 +98,13 @@ public class RegistrationGui extends VerticalLayout {
             }
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout(usernameField,nameField,surnameField,password1,password2,register);
+        HorizontalLayout usernameLayout = new HorizontalLayout(usernameField);
+        HorizontalLayout nameAndSurnameLayout = new HorizontalLayout(nameField,surnameField);
+        HorizontalLayout passwordLayout = new HorizontalLayout(password1,password2);
+        HorizontalLayout submitLayout = new HorizontalLayout(register);
+
+        VerticalLayout verticalLayout = new VerticalLayout(usernameLayout,nameAndSurnameLayout,passwordLayout,submitLayout);
+        verticalLayout.setAlignItems(Alignment.CENTER);
         Component allComponents = new Span(verticalLayout);
         appLayout.setContent(allComponents);
         add(appLayout);

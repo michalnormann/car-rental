@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.server.authentication.logout.RedirectServerLogoutSuccessHandler;
 import org.springframework.security.web.util.RedirectUrlBuilder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,30 +55,24 @@ public class PhotosGui extends VerticalLayout {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
-//            menu.addMenuItems(
-//                    new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Logout",);
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
         }
 
 
-//        List<Car> all = carRepo.
-
-//        Image image = new Image();
-//        all.stream().forEach(element -> {
-//            image.setSrc(element,"");
+//        List<Car> imageCars = carRepo.findAll();
+//
+//        imageCars.stream().forEach(element -> {
+//            Image image = new Image(element.getImageURL(),"brak");
 //            add(image);
 //        });
-//        VerticalLayout images = new VerticalLayout(image);
 //
-//
-//
-//        add(appLayout);
-//
-//        Component allComponents = new Span(images);
-//        appLayout.setContent(allComponents);
 //        add(appLayout);
 
+        Component allComponents = new Span();
+        appLayout.setContent(allComponents);
         add(appLayout);
-
     }
 }

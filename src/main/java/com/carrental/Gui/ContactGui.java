@@ -24,7 +24,6 @@ public class ContactGui extends VerticalLayout {
     public ContactGui(CarRepo carRepo) {
         this.carRepo = carRepo;
 
-        Tab tabview = new Tab();
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
         Image img = new Image("https://cdn4.iconfinder.com/data/icons/rcons-phone/16/handset_round-2-512.png", "Phone Logo");
@@ -55,15 +54,14 @@ public class ContactGui extends VerticalLayout {
         Component contentAdress = new Span(new H3("Adress"),
                 new Span("Al. Jerozolimskie 160   Warszawa , 02-326"
                 ));
-        VerticalLayout verticalLayout = new VerticalLayout(contentAdress, contentNameCompany, contentPhoneNumber);
-        verticalLayout.setAlignItems(Alignment.CENTER);
+
+        VerticalLayout verticalLayout = new VerticalLayout(contentNameCompany, contentAdress, contentPhoneNumber);
         verticalLayout.setPadding(true);
-        verticalLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+        verticalLayout.setWidth("500px");
+        verticalLayout.setJustifyContentMode(JustifyContentMode.START);
         appLayout.setContent(verticalLayout);
 
-
-
-        add(appLayout, tabview);
+        add(appLayout);
 
 
     }

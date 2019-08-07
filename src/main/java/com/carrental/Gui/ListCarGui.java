@@ -142,7 +142,6 @@ public class ListCarGui extends VerticalLayout {
 
                 }
             });
-
             if(!car.isRent()) {
                 rentButton.setText("Rent");
             } else if (car.isRent() && car.getUsername().equals(loggedUser)){
@@ -155,7 +154,6 @@ public class ListCarGui extends VerticalLayout {
             HorizontalLayout buttons = new HorizontalLayout(rentButton);
             return new VerticalLayout(buttons);
         })).setHeader("Actions");
-
 
         // Filter Car Type
         TextField carTypeTextField = new TextField();
@@ -191,6 +189,5 @@ public class ListCarGui extends VerticalLayout {
         Component allComponents = new Span(filterPanel,carGrid);
         appLayout.setContent(allComponents);
         add(appLayout);
-
     }
 }
