@@ -50,16 +50,17 @@ public class RegistrationGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
-                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"),
-                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
-
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "carlist"));
+        }
+        menu.addMenuItems(
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", ""),
+                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"));
 
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }

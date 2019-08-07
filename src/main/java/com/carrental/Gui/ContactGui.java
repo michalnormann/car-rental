@@ -31,15 +31,20 @@ public class ContactGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "carlist"));
+        }
         menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
-                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(), "Photos", "photos"),
-                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", ""),
+                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"));
 
-
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
+        }
 
         Component contentNameCompany = new Span(new H3("Rental Car"),
                 new Span("Rental-Car Company Information"
@@ -51,17 +56,12 @@ public class ContactGui extends VerticalLayout {
                 new Span("Al. Jerozolimskie 160   Warszawa , 02-326"
                 ));
         VerticalLayout verticalLayout = new VerticalLayout(contentAdress, contentNameCompany, contentPhoneNumber);
-        verticalLayout.setSizeFull();
         verticalLayout.setAlignItems(Alignment.CENTER);
+        verticalLayout.setPadding(true);
+        verticalLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         appLayout.setContent(verticalLayout);
 
-        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-
-            menu.addMenuItems(
-                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
-        }
 
         add(appLayout, tabview);
 

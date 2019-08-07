@@ -25,7 +25,7 @@ public class Test {
         car.setCarType(CarType.SEDAN);
         car.setYearProduction(2019);
         car.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565123780/lwy3blg6tyeuflaumkvi.jpg");
-        car.setPrice(500);
+        car.setPrice(600);
         carRepo.save(car);
 
         Car car1 = new Car();
@@ -34,7 +34,8 @@ public class Test {
         car1.setFuel(Fuel.DIESEL);
         car1.setCarType(CarType.COMBI);
         car1.setYearProduction(2018);
-        car1.setPrice(1000);
+        car1.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565200045/uar5srtivzrrachipvud.jpg");
+        car1.setPrice(300);
         carRepo.save(car1);
 
 

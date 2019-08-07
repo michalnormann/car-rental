@@ -26,7 +26,7 @@ public class ImageUpader {
         try {
             uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
         } catch (IOException e) {
-            // 
+            //
         }
         return uploadResult.get("url").toString();
     }

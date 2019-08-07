@@ -37,14 +37,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/contact","/register").permitAll()
-                .antMatchers("/addcar", "/contact", "/photos" ,"/list-car","/uploadimage").hasRole("ADMIN")
-                .antMatchers("/contact", "/photos", "/list-car").hasRole("USER")
-                .anyRequest().authenticated()
-                .and().formLogin().defaultSuccessUrl("/")
-                .and().logout().logoutSuccessUrl("/contact");
-        http.csrf().disable();
+        http.httpBasic().and().authorizeRequests()
+                .antMatchers("/contact","/","/register").permitAll()
+                .antMatchers("/carlist").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/addcar").hasRole("ADMIN")
+                .and()
+                .formLogin().permitAll()
+                .and()
+                .logout()
+                .and()
+                .csrf().disable();
     }
 
     @Autowired

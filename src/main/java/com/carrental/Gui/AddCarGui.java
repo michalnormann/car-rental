@@ -50,33 +50,39 @@ public class AddCarGui extends VerticalLayout{
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
-                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"),
-                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
-
-
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "carlist"));
+        }
+        menu.addMenuItems(
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", ""),
+                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"));
 
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
 
         TextField markTextField = new TextField("Mark");
+        markTextField.setWidth("200px");
         TextField modelTextField = new TextField("Model");
+        modelTextField.setWidth("200px");
         HorizontalLayout hz1 = new HorizontalLayout(markTextField, modelTextField);
         ComboBox<Fuel> fuelComboBox= new ComboBox<>("Fuel",Fuel.values());
+        fuelComboBox.setWidth("200px");
         NumberField yearProductionNumberField = new NumberField("Year of Production");
+        yearProductionNumberField.setWidth("200px");
         yearProductionNumberField.setMin(1980);
         yearProductionNumberField.setMax(2019);
         yearProductionNumberField.setErrorMessage("Set year of production from 1980 to 2019.");
         yearProductionNumberField.setHasControls(true);
         HorizontalLayout hz2 = new HorizontalLayout(fuelComboBox, yearProductionNumberField);
         ComboBox<CarType> carTypeComboBox= new ComboBox<>("Car Type", CarType.values());
+        carTypeComboBox.setWidth("200px");
         NumberField priceNumberField = new NumberField("Price per day");
+        priceNumberField.setWidth("200px");
         priceNumberField.setSuffixComponent(new Span("zł"));
         priceNumberField.setValue(100d);
         priceNumberField.setMin(100);
@@ -86,7 +92,8 @@ public class AddCarGui extends VerticalLayout{
 
 
         // Image Upader
-        TextField localTextField = new TextField("Loc.: (ex. E:\\folder\\image.jpg");
+        TextField localTextField = new TextField("Loc.: (ex. E:\\folder\\image.jpg)");
+        localTextField.setWidth("320px");
         Button button = new Button("Upload");
         Image image = new Image();
         button.addClickListener(event -> {
@@ -96,9 +103,13 @@ public class AddCarGui extends VerticalLayout{
             image.setMaxWidth("200px");
         });
 
-        VerticalLayout imageVerticalLayout = new VerticalLayout(localTextField,button,image);
+        HorizontalLayout imageVerticalLayout = new HorizontalLayout(localTextField,button);
+        imageVerticalLayout.setAlignItems(Alignment.END);
+        VerticalLayout addImage = new VerticalLayout(imageVerticalLayout,image);
+        addImage.setAlignItems(Alignment.CENTER);
+        imageVerticalLayout.setJustifyContentMode(JustifyContentMode.START);
 
-
+        Label info = new Label("Before click 'Add new car' click Upload to connect image with your car.");
         Button addButton = new Button("Add new car");
         Label not = new Label(
                 "You have added the car correctly.");
@@ -122,9 +133,11 @@ public class AddCarGui extends VerticalLayout{
             yearProductionNumberField.clear();
             carTypeComboBox.clear();
             priceNumberField.clear();
+            localTextField.clear();
+            image.setSrc("");
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout(hz1,hz2,hz3,imageVerticalLayout,addButton);
+        VerticalLayout verticalLayout = new VerticalLayout(hz1,hz2,hz3,addImage,info, addButton);
         verticalLayout.setSizeFull();
         verticalLayout.setAlignItems(Alignment.CENTER);
 

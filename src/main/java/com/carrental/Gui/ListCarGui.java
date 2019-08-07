@@ -13,6 +13,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSelectionColumn;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -36,7 +37,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import java.util.Collection;
 import java.util.List;
 
-@Route("")
+@Route("carlist")
 public class ListCarGui extends VerticalLayout {
 
     private CarRepo carRepo;
@@ -52,18 +53,17 @@ public class ListCarGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-
-        menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", ""),
-                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"),
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Fotos", "fotos"),
-                new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
-
-
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "carlist"));
+        }
+        menu.addMenuItems(
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", ""),
+                new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"));
 
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
@@ -74,19 +74,33 @@ public class ListCarGui extends VerticalLayout {
         carGrid.setItems(cars);
         carGrid.setHeightFull();
 
+        carGrid.removeColumnByKey("fuel");
+        carGrid.removeColumnByKey("yearProduction");
+        carGrid.removeColumnByKey("price");
+        carGrid.removeColumnByKey("id");
+        carGrid.removeColumnByKey("rent");
+        carGrid.removeColumnByKey("imageURL");
+        carGrid.removeColumnByKey("username");
+        carGrid.setColumns("mark","model","carType");
+
         carGrid.setSelectionMode(Grid.SelectionMode.NONE);
         carGrid.setItemDetailsRenderer(TemplateRenderer.<Car> of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                        + "<div><b>Mark: </b>[[item.mark]]</div>"
-                        + "<div><b>Model: </b>[[item.model]]</div>"
-                        + "<div><b>Fuel: </b>[[item.fuel]]</div>"
-                        + "<div><b>Year of Production: </b>[[item.yearProduction]]</div>"
-                        + "<div><b>CarType: </b>[[item.carType]]</div>"
-                        + "<div><b>Price: </b>[[item.price]] zł</div>"
-                        + "<div><b>Rent: </b>[[item.rent]]</div>"
-//                        + "<div><b>Username: </b>[[item.username]]</div>"
-                        + "<div><img src=\"[[item.imageURL]]\" style=\"max-height:200px;max-width:200px\"></div>"
-                        + "</div>")
+                        + "<table>\n" +
+                        "<tbody>\n" +
+                        "<tr>\n" +
+                        "<td style=\"width: 300px;\" ><img src=\"[[item.imageURL]]\" style=\"max-height:250px;max-width:250px\"></td>\n" +
+                        "<td><div><b>Mark: </b>[[item.mark]]</div>\n" +
+                        "<div><b>Model: </b>[[item.model]]</div>\n" +
+                        "<div><b>Fuel: </b>[[item.fuel]]</div>\n" +
+                        "<div><b>Year of Production: </b>[[item.yearProduction]]</div>\n" +
+                        "<div><b>CarType: </b>[[item.carType]]</div>\n" +
+                        "<div><b>Price: </b>[[item.price]] zł</div>\n" +
+                        "<div><b>Rented By: </b>[[item.username]]</div>\n</td>\n" +
+                        "</tr>\n" +
+                        "</tbody>\n" +
+                        "</table>" +
+                        "</div>")
                 .withProperty("mark", Car::getMark)
                 .withProperty("model", Car::getModel)
                 .withProperty("fuel", Car::getFuel)
@@ -128,6 +142,7 @@ public class ListCarGui extends VerticalLayout {
 
                 }
             });
+
             if(!car.isRent()) {
                 rentButton.setText("Rent");
             } else if (car.isRent() && car.getUsername().equals(loggedUser)){
@@ -141,12 +156,6 @@ public class ListCarGui extends VerticalLayout {
             return new VerticalLayout(buttons);
         })).setHeader("Actions");
 
-        carGrid.removeColumnByKey("fuel");
-        carGrid.removeColumnByKey("yearProduction");
-        carGrid.removeColumnByKey("price");
-        carGrid.removeColumnByKey("id");
-        carGrid.removeColumnByKey("rent");
-        carGrid.removeColumnByKey("imageURL");
 
         // Filter Car Type
         TextField carTypeTextField = new TextField();
