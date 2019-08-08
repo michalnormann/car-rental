@@ -2,6 +2,7 @@ package com.carrental.Gui;
 
 import com.carrental.model.User;
 import com.carrental.repository.UserRepo;
+import com.carrental.service.MailService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
@@ -24,12 +25,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.mail.MessagingException;
 import java.util.Collection;
 
 @Route("register")
 public class RegistrationGui extends VerticalLayout {
 
     private UserRepo userRepo;
+    private MailService mailService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,8 +40,9 @@ public class RegistrationGui extends VerticalLayout {
     }
 
     @Autowired
-    public RegistrationGui(UserRepo userRepo) {
+    public RegistrationGui(UserRepo userRepo, MailService mailService) {
         this.userRepo = userRepo;
+        this.mailService = mailService;
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
@@ -64,11 +68,13 @@ public class RegistrationGui extends VerticalLayout {
         TextField usernameField = new TextField("Username:");
         TextField nameField = new TextField("Name:");
         TextField surnameField = new TextField("Surname:");
+        TextField emailField1 = new TextField("E-mail:");
+        TextField emailField2 = new TextField("Confirm E-mail:");
         PasswordField password1 = new PasswordField("Password:");
         PasswordField password2 = new PasswordField("Confirm password:");
         Div content = new Div();
         content.addClassName("my-style");
-        content.setText("The password is not the same, please again!");
+        content.setText("The password or email is not the same, please again!");
         Div content2 = new Div();
         content2.addClassName("my-style");
         content2.setText("User added successfully.");
@@ -84,15 +90,32 @@ public class RegistrationGui extends VerticalLayout {
 
         Button register = new Button("Register", event -> {
 
-            if(password1.getValue().equals(password2.getValue())) {
+            if(password1.getValue().equals(password2.getValue()) && emailField1.getValue().equals(emailField2.getValue())) {
                 User user = new User();
                 user.setRole("ROLE_USER");
                 user.setLogin(usernameField.getValue());
                 user.setName(nameField.getValue());
                 user.setSurname(surnameField.getValue());
+                user.setEmail(emailField1.getValue());
                 user.setPassword(passwordEncoder().encode(password1.getValue()));
                 userRepo.save(user);
                 successNotyfication.open();
+                if(successNotyfication.isOpened()) {
+                    try {
+                        mailService.sendMail(user.getEmail(),
+                                "Created account in Car Rental",
+                                "Hello " + user.getName() + " " + user.getSurname() + ",<br>" +
+                                        "your account is created.<br>" +
+                                        "<b> Username: </b>" + user.getUsername() + "<br>" +
+                                        "<b> Password: </b>" + password1.getValue() + "<br><br>" +
+                                        "Rent your first car now!"
+                                ,
+                                true);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             } else {
                 errorNotyfication.open();
             }
@@ -100,10 +123,11 @@ public class RegistrationGui extends VerticalLayout {
 
         HorizontalLayout usernameLayout = new HorizontalLayout(usernameField);
         HorizontalLayout nameAndSurnameLayout = new HorizontalLayout(nameField,surnameField);
+        HorizontalLayout emailLayout = new HorizontalLayout(emailField1,emailField2);
         HorizontalLayout passwordLayout = new HorizontalLayout(password1,password2);
         HorizontalLayout submitLayout = new HorizontalLayout(register);
 
-        VerticalLayout verticalLayout = new VerticalLayout(usernameLayout,nameAndSurnameLayout,passwordLayout,submitLayout);
+        VerticalLayout verticalLayout = new VerticalLayout(usernameLayout,nameAndSurnameLayout,emailLayout,passwordLayout,submitLayout);
         verticalLayout.setAlignItems(Alignment.CENTER);
         Component allComponents = new Span(verticalLayout);
         appLayout.setContent(allComponents);

@@ -6,6 +6,7 @@ import com.carrental.model.Fuel;
 import com.carrental.model.User;
 import com.carrental.repository.CarRepo;
 import com.carrental.repository.UserRepo;
+import com.carrental.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,8 @@ public class Test {
         car1.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565200045/uar5srtivzrrachipvud.jpg");
         car1.setPrice(300);
         carRepo.save(car1);
+
+
 
 
     }

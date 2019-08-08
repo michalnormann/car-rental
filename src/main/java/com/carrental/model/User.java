@@ -17,6 +17,7 @@ public class User implements UserDetails {
     private String login;
     private String name;
     private String surname;
+    private String email;
     private String password;
     private String role;
 
@@ -54,6 +55,14 @@ public class User implements UserDetails {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {

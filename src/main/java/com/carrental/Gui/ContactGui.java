@@ -63,6 +63,5 @@ public class ContactGui extends VerticalLayout {
 
         add(appLayout);
 
-
     }
 }
