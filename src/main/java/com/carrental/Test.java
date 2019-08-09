@@ -31,7 +31,7 @@ public class Test {
 
         Car car1 = new Car();
         car1.setModel("Passat");
-        car1.setMark("Volksvagen");
+        car1.setMark("Volkswagen");
         car1.setFuel(Fuel.DIESEL);
         car1.setCarType(CarType.COMBI);
         car1.setYearProduction(2018);

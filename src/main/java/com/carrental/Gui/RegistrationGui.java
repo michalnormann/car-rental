@@ -105,7 +105,7 @@ public class RegistrationGui extends VerticalLayout {
                         mailService.sendMail(user.getEmail(),
                                 "Created account in Car Rental",
                                 "Hello " + user.getName() + " " + user.getSurname() + ",<br>" +
-                                        "your account is created.<br>" +
+                                        "your account is created.<br><br>" +
                                         "<b> Username: </b>" + user.getUsername() + "<br>" +
                                         "<b> Password: </b>" + password1.getValue() + "<br><br>" +
                                         "Rent your first car now!"
@@ -115,6 +115,13 @@ public class RegistrationGui extends VerticalLayout {
                         e.printStackTrace();
                     }
                 }
+                usernameField.clear();
+                nameField.clear();
+                surnameField.clear();
+                emailField1.clear();
+                emailField2.clear();
+                password1.clear();
+                password2.clear();
 
             } else {
                 errorNotyfication.open();
