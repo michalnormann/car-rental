@@ -128,6 +128,8 @@ public class ListCarGui extends VerticalLayout {
 
         String loggedUser = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getLogin();
         String loggedUserEmail = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getEmail();
+        String loggedUserName = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getName();
+        String loggedUserSurname = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getSurname();
 
         carGrid.addColumn(new ComponentRenderer<>(car -> {
 
@@ -141,7 +143,7 @@ public class ListCarGui extends VerticalLayout {
                     try {
                         File file = new File(PDFCreator.DEST);
                         file.getParentFile().mkdirs();
-                        (new PDFCreator()).createPdf(PDFCreator.DEST,loggedUser ,car.getMark(), car.getModel(), car.getFuel().toString(), car.getYearProduction(), car.getCarType().toString(), car.getPrice());
+                        (new PDFCreator()).createPdf(PDFCreator.DEST,loggedUserName + " " + loggedUserSurname ,car.getMark(), car.getModel(), car.getFuel().toString(), car.getYearProduction(), car.getCarType().toString(), car.getPrice());
                         try {
                             mailService.sendMail(loggedUserEmail, "Billing - Car Rental Company", "New invoice has been generated.<br>\nFind document in the attachment, please.", "Invoice", file, true);
                         } catch (MessagingException var8) {
