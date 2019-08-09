@@ -1,9 +1,11 @@
 package com.carrental.Gui;
 
+import com.carrental.invoiceCreator.PDFCreator;
 import com.carrental.model.Car;
 import com.carrental.model.User;
 import com.carrental.repository.CarRepo;
 import com.carrental.repository.UserRepo;
+import com.carrental.service.MailService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -34,6 +36,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
+import javax.mail.MessagingException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,10 +47,14 @@ public class ListCarGui extends VerticalLayout {
 
     private CarRepo carRepo;
     private UserRepo userRepo;
+    private MailService mailService;
 
-    public ListCarGui(CarRepo carRepo, UserRepo userRepo) {
+
+    public ListCarGui(CarRepo carRepo, UserRepo userRepo, MailService mailService) {
         this.carRepo = carRepo;
         this.userRepo = userRepo;
+        this.mailService = mailService;
+
 
         AppLayout appLayout = new AppLayout();
         AppLayoutMenu menu = appLayout.createMenu();
@@ -124,6 +133,7 @@ public class ListCarGui extends VerticalLayout {
         carGrid.setDataProvider(dataProvider);
 
         String loggedUser = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getLogin();
+        String loggedUserEmail = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getEmail();
 
         carGrid.addColumn(new ComponentRenderer<>(car -> {
 
@@ -134,6 +144,25 @@ public class ListCarGui extends VerticalLayout {
                     carRepo.save(car);
                     UI.getCurrent().getPage().reload();
                 } else if (car.isRent() && car.getUsername().equals(loggedUser)){
+                    try {
+                        File file = new File(PDFCreator.DEST);
+                        file.getParentFile().mkdirs();
+                        new PDFCreator().createPdf(PDFCreator.DEST,car.getMark(),car.getModel(),car.getFuel().toString(),car.getYearProduction(),car.getCarType().toString(),car.getPrice());
+                                try {
+                                    mailService.sendMail(loggedUserEmail,
+                                            "Billing - Car Rental Company",
+                                            "New invoice has been generated.<br>\n" +
+                                                    "Find document in the attachment, please.",
+                                            "Invoice",
+                                            file,
+                                            true);
+                                } catch (MessagingException e) {
+                                    e.printStackTrace();
+                                }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     car.setRent(false);
                     car.setUsername(null);
                     carRepo.save(car);

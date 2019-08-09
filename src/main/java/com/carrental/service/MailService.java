@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 
 @Service
 public class MailService {
@@ -28,6 +29,21 @@ public class MailService {
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setSubject(subject);
         mimeMessageHelper.setText(text, isHtmlContent);
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendMail(String to,
+                         String subject,
+                         String text,
+                         String fileName,
+                         File file,
+                         boolean isHtmlContent) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setText(text, isHtmlContent);
+        mimeMessageHelper.addAttachment(fileName,file);
         javaMailSender.send(mimeMessage);
     }
 }
