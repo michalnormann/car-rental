@@ -19,16 +19,14 @@ import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 
-import java.io.File;
 import java.io.IOException;
 
 public class PDFCreator {
 
-    public static final String DEST = "src/main/java/com/carrental/pdfFile/car-rental-invoice.pdf";
+    public static final String DEST = "C:/Users/Natalia/Downloads/car-rental-invoice.pdf";
     public static final String IMAGE = "https://cdn0.iconfinder.com/data/icons/automotive/128/CARS-512.png";
 
-
-    public void createPdf(String dest, String mark, String model, String fuel, double yearProduction,
+    public void createPdf(String dest, String username, String mark, String model, String fuel, double yearProduction,
                           String carType, double price) throws IOException {
         PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
         PageSize pageSize = new PageSize(new Rectangle(600, 600));
@@ -63,9 +61,9 @@ public class PDFCreator {
         table2.setWidth(UnitValue.createPercentValue(100))
                 .setTextAlignment(TextAlignment.LEFT)
                 .setHorizontalAlignment(HorizontalAlignment.CENTER);
-        table2.addHeaderCell("YOUR BILL:").setBold();
+        table2.addHeaderCell("BILLING ACCOUNT: " + username).setBold();
         table2.addHeaderCell("GROSS");
-        table2.addHeaderCell(String.valueOf(price));
+        table2.addHeaderCell(String.valueOf(System.out.format("%.2f%n", price))); //sprawdzam czy daje 2 miejsca po ,
         table2.addCell("");
         table2.addCell("NET");
         table2.addCell(String.valueOf(price-(price*0.23)));
@@ -73,7 +71,9 @@ public class PDFCreator {
         table2.addCell("IN TOTAL:").setBold();
         table2.addCell(String.valueOf(price)).setBold();
         doc.add(table2);
-        Text thanks = new Text("thank you for your trust and cooperation!").setFontSize(26).setItalic();
+        Paragraph paragraph2 = new Paragraph(new Text("\n"));
+        doc.add(paragraph2);
+        Text thanks = new Text("Thank you for your trust and cooperation!").setFontSize(20).setItalic();
         doc.add(new Paragraph(thanks).setTextAlignment(TextAlignment.RIGHT));
         doc.close();
         System.out.println("PDF Created");
