@@ -2,15 +2,16 @@ package com.carrental.Gui;
 
 import com.carrental.repository.CarRepo;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.Route;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -45,6 +46,24 @@ public class ContactGui extends VerticalLayout {
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
 
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Login");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/login\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.EXIT.create(), "Logout");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/logout\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
         Component contentNameCompany = new Span(new H3("Rental Car"),
                 new Span("Rental-Car Company Information"
                 ));

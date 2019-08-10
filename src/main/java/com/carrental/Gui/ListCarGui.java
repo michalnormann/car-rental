@@ -71,6 +71,24 @@ public class ListCarGui extends VerticalLayout {
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
         }
 
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Login");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/login\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.EXIT.create(), "Logout");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/logout\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
 
         Grid<Car> carGrid = new Grid<>(Car.class);
         List<Car> cars = carRepo.findAll();

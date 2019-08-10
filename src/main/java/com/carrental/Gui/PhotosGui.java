@@ -1,28 +1,19 @@
 package com.carrental.Gui;
 
-import com.carrental.image.ImageUpader;
 import com.carrental.model.Car;
 import com.carrental.repository.CarRepo;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.server.authentication.logout.RedirectServerLogoutSuccessHandler;
-import org.springframework.security.web.util.RedirectUrlBuilder;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -59,19 +50,38 @@ public class PhotosGui extends VerticalLayout {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Login");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/login\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.EXIT.create(), "Logout");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/logout\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
         }
 
 
-//        List<Car> imageCars = carRepo.findAll();
-//
-//        imageCars.stream().forEach(element -> {
-//            Image image = new Image(element.getImageURL(),"brak");
-//            add(image);
-//        });
-//
-//        add(appLayout);
 
-        Component allComponents = new Span();
+
+        List<Car> imageCars = carRepo.findAll();
+
+        VerticalLayout allComponents = new VerticalLayout();
+        allComponents.setAlignItems(Alignment.CENTER);
+        imageCars.stream().forEach(element -> {
+            Image image = new Image(element.getImageURL(),"brak");
+            image.setMaxHeight("500px");
+            image.setMaxWidth("500px");
+            allComponents.add(image);
+        });
+
+        add(appLayout);
+
         appLayout.setContent(allComponents);
         add(appLayout);
     }
