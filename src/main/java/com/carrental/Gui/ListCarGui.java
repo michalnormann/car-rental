@@ -15,7 +15,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
@@ -201,14 +203,12 @@ public class ListCarGui extends VerticalLayout {
         })).setHeader("Actions");
 
         // Filter Car Type
-
         TextField markTextField = new TextField();
         markTextField.addValueChangeListener(event -> dataProvider.addFilter(
                 carType -> StringUtils.containsIgnoreCase(carType.getMark(),
                         markTextField.getValue())));
 
         markTextField.setValueChangeMode(ValueChangeMode.EAGER);
-        markTextField.setSizeFull();
         markTextField.setPlaceholder("Mark Filter");
 
         TextField modelTextField = new TextField();
@@ -217,7 +217,6 @@ public class ListCarGui extends VerticalLayout {
                         modelTextField.getValue())));
 
         modelTextField.setValueChangeMode(ValueChangeMode.EAGER);
-        modelTextField.setSizeFull();
         modelTextField.setPlaceholder("Model Filter");
 
         TextField carTypeTextField = new TextField();
@@ -226,14 +225,17 @@ public class ListCarGui extends VerticalLayout {
                         carTypeTextField.getValue())));
 
         carTypeTextField.setValueChangeMode(ValueChangeMode.EAGER);
-        carTypeTextField.setSizeFull();
         carTypeTextField.setPlaceholder("Car Type Filter");
 
-        Details filterPanel = new Details("Filters", new Span(markTextField, modelTextField, carTypeTextField));
-        filterPanel.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
+        HeaderRow filterRow = carGrid.appendHeaderRow();
 
-        Component allComponents = new Span(filterPanel, carGrid);
-        appLayout.setContent(allComponents);
+        filterRow.getCells().get(0).setComponent(markTextField);
+        filterRow.getCells().get(1).setComponent(modelTextField);
+        filterRow.getCells().get(2).setComponent(carTypeTextField);
+
+        markTextField.setSizeFull();
+
+        appLayout.setContent(carGrid);
         add(appLayout);
     }
 }

@@ -30,4 +30,14 @@ public class ImageUpader {
         }
         return uploadResult.get("url").toString();
     }
+
+    public String uploadFile(File path) {
+        Map uploadResult = null;
+        try {
+            uploadResult = cloudinary.uploader().upload(path, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            //
+        }
+        return uploadResult.get("url").toString();
+    }
 }

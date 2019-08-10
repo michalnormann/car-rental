@@ -70,7 +70,7 @@ public class ContactGui extends VerticalLayout {
         Component contentPhoneNumber = new Span(new H3("Phone Number"),
                 new Span("505-505-505"
                 ));
-        Component contentAdress = new Span(new H3("Adress"),
+        Component contentAdress = new Span(new H3("Address"),
                 new Span("Al. Jerozolimskie 160   Warszawa , 02-326"
                 ));
 
