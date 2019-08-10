@@ -14,8 +14,10 @@ import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -56,14 +58,14 @@ public class ListCarGui extends VerticalLayout {
         img.setHeight("100px");
         appLayout.setBranding(img);
 
-        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.CAR.create(), "Car list", "carlist"));
         }
         menu.addMenuItems(
-                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(),"Photos", ""),
+                new AppLayoutMenuItem(VaadinIcon.CAMERA.create(), "Photos", ""),
                 new AppLayoutMenuItem(VaadinIcon.PHONE.create(), "Contact", "contact"));
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
@@ -97,15 +99,14 @@ public class ListCarGui extends VerticalLayout {
 
         carGrid.removeColumnByKey("fuel");
         carGrid.removeColumnByKey("yearProduction");
-        carGrid.removeColumnByKey("price");
         carGrid.removeColumnByKey("id");
         carGrid.removeColumnByKey("rent");
         carGrid.removeColumnByKey("imageURL");
         carGrid.removeColumnByKey("username");
-        carGrid.setColumns("mark","model","carType");
+        carGrid.setColumns("mark", "model", "carType", "price");
 
         carGrid.setSelectionMode(Grid.SelectionMode.NONE);
-        carGrid.setItemDetailsRenderer(TemplateRenderer.<Car> of(
+        carGrid.setItemDetailsRenderer(TemplateRenderer.<Car>of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
                         + "<table>\n" +
                         "<tbody>\n" +
@@ -144,24 +145,24 @@ public class ListCarGui extends VerticalLayout {
         ListDataProvider<Car> dataProvider = new ListDataProvider<>(cars);
         carGrid.setDataProvider(dataProvider);
 
-        String loggedUser = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getLogin();
-        String loggedUserEmail = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getEmail();
-        String loggedUserName = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getName();
-        String loggedUserSurname = ((User)((UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getSurname();
+        String loggedUser = ((User) ((UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getLogin();
+        String loggedUserEmail = ((User) ((UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getEmail();
+        String loggedUserName = ((User) ((UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getName();
+        String loggedUserSurname = ((User) ((UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).getSurname();
 
         carGrid.addColumn(new ComponentRenderer<>(car -> {
 
             Button rentButton = new Button("Rent", event -> {
-                if(!car.isRent()) {
+                if (!car.isRent()) {
                     car.setRent(true);
                     car.setUsername(loggedUser);
                     carRepo.save(car);
-                    UI.getCurrent().getPage().reload();
-                } else if (car.isRent() && car.getUsername().equals(loggedUser)){
+                    carGrid.setItems(carRepo.findAll());
+                } else if (car.isRent() && car.getUsername().equals(loggedUser)) {
                     try {
                         File file = new File(PDFCreator.DEST);
                         file.getParentFile().mkdirs();
-                        (new PDFCreator()).createPdf(PDFCreator.DEST,loggedUserName + " " + loggedUserSurname ,car.getMark(), car.getModel(), car.getFuel().toString(), car.getYearProduction(), car.getCarType().toString(), car.getPrice());
+                        (new PDFCreator()).createPdf(PDFCreator.DEST, loggedUserName + " " + loggedUserSurname, car.getMark(), car.getModel(), car.getFuel().toString(), car.getYearProduction(), car.getCarType().toString(), car.getPrice());
                         try {
                             mailService.sendMail(loggedUserEmail, "Billing - Car Rental Company", "New invoice has been generated.<br>\nFind document in the attachment, please.", "Invoice", file, true);
                         } catch (MessagingException var8) {
@@ -173,32 +174,33 @@ public class ListCarGui extends VerticalLayout {
                     car.setRent(false);
                     car.setUsername(null);
                     carRepo.save(car);
-                    UI.getCurrent().getPage().reload();
+                    carGrid.setItems(carRepo.findAll());
                 } else {
                 }
             });
-            if(!car.isRent()) {
+            if (!car.isRent()) {
                 rentButton.setText("Rent");
-            } else if (car.isRent() && car.getUsername().equals(loggedUser)){
+            } else if (car.isRent() && car.getUsername().equals(loggedUser)) {
                 rentButton.setText("Return");
             } else {
                 rentButton.setText("Rented");
                 rentButton.setEnabled(false);
             }
+            Button removeCar = new Button("Remove");
+            removeCar.setVisible(false);
+            if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                removeCar.setVisible(true);
+                removeCar.addClickListener(event -> {
+                    carRepo.delete(car);
+                    carGrid.setItems(carRepo.findAll());
+                });
+            }
 
-            HorizontalLayout buttons = new HorizontalLayout(rentButton);
+            HorizontalLayout buttons = new HorizontalLayout(rentButton, removeCar);
             return new VerticalLayout(buttons);
         })).setHeader("Actions");
 
         // Filter Car Type
-        TextField carTypeTextField = new TextField();
-        carTypeTextField.addValueChangeListener(event -> dataProvider.addFilter(
-                carType -> StringUtils.containsIgnoreCase(carType.getCarType().toString(),
-                        carTypeTextField.getValue())));
-
-        carTypeTextField.setValueChangeMode(ValueChangeMode.EAGER);
-        carTypeTextField.setSizeFull();
-        carTypeTextField.setPlaceholder("Car Type Filter");
 
         TextField markTextField = new TextField();
         markTextField.addValueChangeListener(event -> dataProvider.addFilter(
@@ -218,10 +220,19 @@ public class ListCarGui extends VerticalLayout {
         modelTextField.setSizeFull();
         modelTextField.setPlaceholder("Model Filter");
 
-        Details filterPanel = new Details("Filters",new Span(carTypeTextField,markTextField,modelTextField));
+        TextField carTypeTextField = new TextField();
+        carTypeTextField.addValueChangeListener(event -> dataProvider.addFilter(
+                carType -> StringUtils.containsIgnoreCase(carType.getCarType().toString(),
+                        carTypeTextField.getValue())));
+
+        carTypeTextField.setValueChangeMode(ValueChangeMode.EAGER);
+        carTypeTextField.setSizeFull();
+        carTypeTextField.setPlaceholder("Car Type Filter");
+
+        Details filterPanel = new Details("Filters", new Span(markTextField, modelTextField, carTypeTextField));
         filterPanel.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
 
-        Component allComponents = new Span(filterPanel,carGrid);
+        Component allComponents = new Span(filterPanel, carGrid);
         appLayout.setContent(allComponents);
         add(appLayout);
     }

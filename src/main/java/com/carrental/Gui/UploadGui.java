@@ -18,7 +18,6 @@ public class UploadGui extends VerticalLayout {
     public UploadGui(ImageUpader imageUpader) {
         this.imageUpader = imageUpader;
 
-
         Label label = new Label();
         TextField textField = new TextField();
         Button button = new Button("Upload");

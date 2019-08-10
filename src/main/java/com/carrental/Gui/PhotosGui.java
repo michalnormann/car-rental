@@ -66,9 +66,6 @@ public class PhotosGui extends VerticalLayout {
             menu.addMenuItems(appLayoutMenuItemLogin);
         }
 
-
-
-
         List<Car> imageCars = carRepo.findAll();
 
         VerticalLayout allComponents = new VerticalLayout();
