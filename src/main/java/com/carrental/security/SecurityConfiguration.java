@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .and()
-                .csrf().disable();
+                .csrf().disable().cors().disable().headers().disable();
     }
 
     @Autowired
@@ -57,18 +57,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         User admin = new User();
         admin.setLogin("admin");
         admin.setRole("ROLE_ADMIN");
+        admin.setEmail("xyz@xyz.pl");
         admin.setPassword(passwordEncoder().encode("1234"));
         userRepo.save(admin);
 
         User user1 = new User();
         user1.setLogin("user");
         user1.setRole("ROLE_USER");
+        user1.setEmail("xyz@xyz.pl");
         user1.setPassword(passwordEncoder().encode("1234"));
         userRepo.save(user1);
 
         User user2 = new User();
         user2.setLogin("user2");
         user2.setRole("ROLE_USER");
+        user2.setEmail("xyz@xyz.pl");
         user2.setPassword(passwordEncoder().encode("1234"));
         userRepo.save(user2);
     }

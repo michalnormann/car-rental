@@ -4,6 +4,7 @@ import com.carrental.model.User;
 import com.carrental.repository.UserRepo;
 import com.carrental.service.MailService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.AppLayoutMenu;
 import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
@@ -63,6 +64,25 @@ public class RegistrationGui extends VerticalLayout {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             menu.addMenuItems(
                     new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Add car", "addcar"));
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            menu.addMenuItems(
+                    new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Register", "register"));
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.PLUS.create(), "Login");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/login\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            AppLayoutMenuItem appLayoutMenuItemLogin = new AppLayoutMenuItem(VaadinIcon.EXIT.create(), "Logout");
+            appLayoutMenuItemLogin.addMenuItemClickListener(menuItemClickEvent ->
+            {
+                UI.getCurrent().getPage().executeJavaScript("window.open(\"/logout\", \"_self\");");
+            });
+            menu.addMenuItems(appLayoutMenuItemLogin);
         }
 
         TextField usernameField = new TextField("Username:");
