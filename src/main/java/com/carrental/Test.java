@@ -3,7 +3,10 @@ package com.carrental;
 import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
+import com.carrental.model.User;
 import com.carrental.repository.CarRepo;
+import com.carrental.repository.UserRepo;
+import com.carrental.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +59,7 @@ public class Test {
         car3.setPrice(400);
         carRepo.save(car3);
 
+
         Car car4 = new Car();
         car4.setModel("TT");
         car4.setMark("Audi");
@@ -83,7 +87,7 @@ public class Test {
         car6.setCarType(CarType.HATCHBACK);
         car6.setYearProduction(2018);
         car6.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565425616/jzgd1wlhbnhuvexjk1gq.jpg");
-        car6.setPrice(300);
+        car6.setPrice(400);
         carRepo.save(car6);
 
         Car car7 = new Car();
@@ -95,6 +99,9 @@ public class Test {
         car7.setImageURL("http://res.cloudinary.com/dqxizarbt/image/upload/v1565426025/tw3ehszupl6eznzgco84.jpg");
         car7.setPrice(2);
         carRepo.save(car7);
+
+
+
 
     }
 }
