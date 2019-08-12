@@ -24,6 +24,8 @@ Project is created with:
 - MySQL
 - Hibernate
 - Vaadin
+- iText
+- JavaMail
 - Heraku
 
 
