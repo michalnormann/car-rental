@@ -3,10 +3,7 @@ package com.carrental;
 import com.carrental.model.Car;
 import com.carrental.model.CarType;
 import com.carrental.model.Fuel;
-import com.carrental.model.User;
 import com.carrental.repository.CarRepo;
-import com.carrental.repository.UserRepo;
-import com.carrental.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

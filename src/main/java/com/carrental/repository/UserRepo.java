@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends CrudRepository<User, Long> {
     Optional<User> findByLogin(String login);
-
 }
