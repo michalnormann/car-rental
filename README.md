@@ -3,6 +3,28 @@
 
 The project introduces an application that allows users to rent a vehicle from a Car-renting company.
 
+## Link to the online application
+
+https://car-rental-bestapp.herokuapp.com/
+
+## Authors
+
+Michał Normann - https://www.linkedin.com/in/michalnormann
+Natalia Bebel - https://www.linkedin.com/in/natalia-bebel-256a0816a
+Kacper Bebel - https://www.linkedin.com/in/kacper-bebel-27a438155
+
+## Technologies
+
+Project is created with:
+- Java 8
+- Spring
+- Maven
+- MySQL
+- Hibernate
+- Vaadin
+- Heraku
+
+
 ## Installation?
 
 No installation needed.
